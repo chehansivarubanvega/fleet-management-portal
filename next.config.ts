@@ -1,6 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  trailingSlash: true,
+  env: {
+    BUILD_STATIC_EXPORT: "false",
+  },
   /* config options here */
   webpack(config) {
     config.module.rules.push({
@@ -9,6 +13,7 @@ const nextConfig: NextConfig = {
     });
     return config;
   },
+  
 };
 
 export default nextConfig;

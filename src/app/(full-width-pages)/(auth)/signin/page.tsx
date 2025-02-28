@@ -1,15 +1,20 @@
+'use client';
 import SignInForm from "@/components/auth/SignInForm";
 import GridShape from "@/components/common/GridShape";
-import { Metadata } from "next";
+// import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
-export const metadata: Metadata = {
-  title: "Next.js SignIn Page | TailAdmin - Next.js Dashboard Template",
-  description: "This is Next.js Signin Page TailAdmin Dashboard Template",
-};
+import logoImage from "../../../../../public/images/logo/vegalogo_transparent.png";
 
+// export const metadata: Metadata = {
+//   title: "Next.js SignIn Page | TailAdmin - Next.js Dashboard Template",
+//   description: "This is Next.js Signin Page TailAdmin Dashboard Template",
+// };
 export default function SignIn() {
+
+  
+console.log("This is Next.js Signin Page TailAdmin Dashboard Template");
   return (
     <div className="relative flex w-full h-screen px-4 py-6 overflow-hidden bg-white z-1 dark:bg-gray-900 sm:p-0">
       <SignInForm />
@@ -21,7 +26,7 @@ export default function SignIn() {
             <Image
               width={231}
               height={48}
-              src="./images/logo/vega_log-svg.svg"
+              src={logoImage}
               alt="Logo"
             />
           </Link>

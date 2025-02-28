@@ -8,6 +8,7 @@ import { AuthContext } from './auth-context';
 import type { AuthState } from '../types';
 import { JWT_STORAGE_KEY } from './constants';
 
+import axios from '@/utils/axios';
 // ----------------------------------------------------------------------
 
 type Props = {
@@ -18,8 +19,10 @@ export function AuthProvider({ children }: Props) {
   const [state, setState] = useState<AuthState>({ user: null, loading: true });
 
   const checkUserSession = useCallback(async () => {
+    console.log('checking user session----------------');
     try {
       const accessToken = sessionStorage.getItem(JWT_STORAGE_KEY);
+     
     
 
       if (accessToken && isValidToken(accessToken)) {
@@ -29,7 +32,9 @@ export function AuthProvider({ children }: Props) {
         const role = sessionStorage.getItem('role');
         const status = sessionStorage.getItem('status');
         const profilePhoto = sessionStorage.getItem('profilePhoto');
+        axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
 
+     
         setState({
           user: { _id, name, email, role, accessToken, status, profilePhoto },
           loading: false,

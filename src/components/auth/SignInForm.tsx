@@ -1,5 +1,4 @@
 "use client";
-import { useAuthContext } from '@/context/AuthContext';
 import Checkbox from "@/components/form/input/Checkbox";
 import Input from "@/components/form/input/InputField";
 import Label from "@/components/form/Label";
@@ -9,13 +8,16 @@ import { useRouter } from "@/routes/hooks";
 import Link from "next/link";
 import React, { useState } from "react";
 import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
+// import { zodResolver } from '@hookform/resolvers/zod';
 import { signInWithPassword } from '@/auth/context/action';
+import { paths } from "@/routes/paths";
 
 import { z as zod } from 'zod';
+import { useAuthContext } from "@/auth/hooks";
 
 
 // ----------------------------------------------------------------------
+
 
 export type SignInSchemaType = zod.infer<typeof SignInSchema>;
 
@@ -49,23 +51,23 @@ export default function SignInForm() {
 
 
   const methods = useForm<SignInSchemaType>({
-    resolver: zodResolver(SignInSchema),
+    // TODO: Uncomment this line to enable validation
+    // resolver: zodResolver(SignInSchema),
     defaultValues,
   });
 
 
   const {
+    register,
     handleSubmit,
-    formState: { isSubmitting },
+    formState: { errors, isSubmitting },
   } = methods;
 
-  
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await signInWithPassword({ email: data.email, password: data.password });
+      await signInWithPassword({ userName: data.email, password: data.password });
       await checkUserSession?.();
-
-      router.refresh();
+      router.replace(paths.dashboard.root);
     } catch (error) {
       console.error(error);
       setErrorMsg('Failed to sign in. Please check your credentials and try again.');
@@ -73,7 +75,6 @@ export default function SignInForm() {
   });
 
   return (
-    
     <div className="flex flex-col flex-1">
       <div className="w-full max-w-md pt-10 mx-auto">
         {/* <Link
@@ -95,14 +96,23 @@ export default function SignInForm() {
             </p>
           </div>
           <div>
-           
-            <form>
+            {errorMsg && (
+              <div className="mb-4 p-3 text-sm text-error-500 bg-error-50 rounded-lg">
+                {errorMsg}
+              </div>
+            )}
+            
+            <form onSubmit={onSubmit} noValidate>
               <div className="space-y-6">
                 <div>
                   <Label>
                     Email <span className="text-error-500">*</span>{" "}
                   </Label>
-                  <Input placeholder="info@gmail.com" />
+                  <Input 
+                    {...register('email')}
+                    placeholder="info@gmail.com"
+                    error={errors.email?.message}
+                  />
                 </div>
                 <div>
                   <Label>
@@ -110,8 +120,10 @@ export default function SignInForm() {
                   </Label>
                   <div className="relative">
                     <Input
+                      {...register('password')}
                       type={showPassword ? "text" : "password"}
                       placeholder="Enter your password"
+                      error={errors.password?.message}
                     />
                     <span
                       onClick={() => setShowPassword(!showPassword)}
@@ -140,8 +152,13 @@ export default function SignInForm() {
                   </Link>
                 </div>
                 <div>
-                  <Button className="w-full" size="sm">
-                    Sign in
+                  <Button 
+                    className="w-full" 
+                    size="sm"
+                    // type="submit"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? 'Signing in...' : 'Sign in'}
                   </Button>
                 </div>
               </div>
@@ -164,3 +181,4 @@ export default function SignInForm() {
     </div>
   );
 }
+

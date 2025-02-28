@@ -10,6 +10,7 @@ import { CONFIG } from '@/global-config';
 
 
 import { useAuthContext } from '../hooks';
+import SplashScreen from '@/components/common/SplashScreen';
 
 // ----------------------------------------------------------------------
 
@@ -35,13 +36,14 @@ export function AuthGuard({ children }: AuthGuardProps) {
   };
 
   const checkPermissions = async (): Promise<void> => {
+    console.log('checking permissions----------------');
     
-  console.log('authenticated', authenticated);
     if (loading) {
       return;
     }
 
     if (!authenticated) {
+        console.log('redirecting to sign in page-----------------');
       const { method } = CONFIG.auth;
 
       const signInPath = signInPaths[method];
@@ -61,7 +63,7 @@ export function AuthGuard({ children }: AuthGuardProps) {
   }, [authenticated, loading]);
 
   if (isChecking) {
-    return <div>Loading</div>; //TODO: Add loading screen
+    return <div><SplashScreen/></div>;
   }
 
 

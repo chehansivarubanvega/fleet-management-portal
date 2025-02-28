@@ -6,7 +6,8 @@ import "swiper/css/pagination";
 import "swiper/css/autoplay";
 import { SidebarProvider } from "@/context/SidebarContext";
 import { ThemeProvider } from "@/context/ThemeContext";
-import { AuthProvider } from "@/app/providers/AuthProvider";
+import { AuthProvider } from "@/auth/context/auth-provider";
+import Providers from "./providers";
 
 const outfit = Outfit({
   variable: "--font-outfit-sans",
@@ -23,7 +24,7 @@ export default function RootLayout({
       <body className={`${outfit.variable} dark:bg-gray-900`}>
         <AuthProvider>
           <ThemeProvider>
-            <SidebarProvider>{children}</SidebarProvider>
+            <SidebarProvider><Providers>{children}</Providers></SidebarProvider>
           </ThemeProvider>
         </AuthProvider>
       </body>

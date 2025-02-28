@@ -17,7 +17,6 @@ import {
   TableIcon,
   UserCircleIcon,
 } from "../icons/index";
-import SidebarWidget from "./SidebarWidget";
 
 type NavItem = {
   name: string;
@@ -30,13 +29,17 @@ const navItems: NavItem[] = [
   {
     icon: <GridIcon />,
     name: "Dashboard",
-    subItems: [{ name: "Ecommerce", path: "/", pro: false }],
+    subItems: [{ name: "Overview", path: "/", pro: false }],
+  }, {
+    icon: <BoxCubeIcon />,
+    name: "Devices",
+    path: "/tracker-devices",
   },
   {
     icon: <CalenderIcon />,
     name: "Calendar",
     path: "/calendar",
-  },
+  }, 
   {
     icon: <UserCircleIcon />,
     name: "User Profile",
@@ -233,8 +236,11 @@ const AppSidebar: React.FC = () => {
   );
   const subMenuRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
-  // const isActive = (path: string) => path === pathname;
-   const isActive = useCallback((path: string) => path === pathname, [pathname]);
+  const isActive = useCallback((path: string) => {
+    // Check if the current pathname starts with the given path
+    // This ensures parent routes are highlighted when child routes are active
+    return pathname.startsWith(path) && path !== '/' ? true : pathname === path;
+  }, [pathname]);
 
   useEffect(() => {
     // Check if the current path matches any submenu item
@@ -356,7 +362,7 @@ const AppSidebar: React.FC = () => {
               {renderMenuItems(navItems, "main")}
             </div>
 
-            <div className="">
+            {/* <div className="">
               <h2
                 className={`mb-4 text-xs uppercase flex leading-[20px] text-gray-400 ${
                   !isExpanded && !isHovered
@@ -371,10 +377,9 @@ const AppSidebar: React.FC = () => {
                 )}
               </h2>
               {renderMenuItems(othersItems, "others")}
-            </div>
+            </div> */}
           </div>
         </nav>
-        {isExpanded || isHovered || isMobileOpen ? <SidebarWidget /> : null}
       </div>
     </aside>
   );

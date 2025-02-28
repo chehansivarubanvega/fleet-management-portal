@@ -53,11 +53,18 @@ export const fetcher = async (args: string | [string, AxiosRequestConfig]) => {
 
 export const endpoints = {
   auth: {
-    signIn: 'auth/signin',
+    signIn: 'auth/login',
     signUp: 'auth/signup',
     generateToken: 'auth/password/generate-token',
     verifyToken: 'auth/password/verify-token',
     verifyEmail: (token: string) => `auth/verify-email/${token}`,
+  },
+  trackerDevice:{
+    list: 'tracker-devices',
+    getById: (id: string) => `trackerDevices/${id}`,
+    create: 'trackerDevices',
+    update: (id: string) => `trackerDevices/${id}`,
+    delete: (id: string) => `trackerDevices/${id}`,
   },
   file: {
     list: 'files',
